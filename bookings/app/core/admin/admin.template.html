@@ -1,0 +1,89 @@
+<div>
+  <md-toolbar class="md-hue-2">
+    <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" aria-label="Back" ng-click="$ctrl.backHome()">
+          <md-icon md-svg-icon="assets/img/round-arrow_back-24px.svg"></md-icon>
+        </md-button>
+      <h1 flex md-truncate>Bookings</h1>
+      
+      <h4 ng-show="$ctrl.user.isLogged()">{{$ctrl.user.username}}</h4>
+      <md-button ng-click="$ctrl.invalidateSession()" ng-show="$ctrl.user.isLogged()" class="md-icon-button" aria-label="Logout">
+        <md-icon md-svg-icon="assets/img/round-exit_to_app-24px.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <div layout="row">
+    <div flex="50">
+      <div style="padding-left: 16px"><h1>Clients Log</h1></div>
+      <div style="overflow: hidden;overflow-y: scroll;height: 790px;">
+        <div ng-repeat="histpiece in $ctrl.history">
+          <md-card>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">{{histpiece.booked_by.username}}</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              <strong>{{histpiece.booking_state.state_title}}</strong>
+              booking #{{histpiece.booking_id.booking_id}} with <i>{{histpiece.booking_id.booking_from.name}} {{histpiece.booking_id.booking_from.surname}}</i>
+              on {{histpiece.booking_id.booking_from.course.courseTitle}}
+            </md-card-content>
+          </md-card>
+        </div>
+      </div>
+    </div>
+
+    <div flex="50">
+      <div style="padding-left: 16px"><h1>Control Panel</h1></div>
+      <div layout="column">
+        <div layout="row" flex="50">
+
+          <div layout="column" flex="50">
+            <div style="overflow: hidden;overflow-y: scroll;height: 340px;">
+              <ul ng-repeat="teacher in $ctrl.teachers" style="font-size: 18px">
+                <md-button class="md-icon-button" aria-label="delete teacher" ng-click="$ctrl.deleteTeacher(teacher)">
+                  <md-icon md-svg-icon="assets/img/round-delete-24px.svg"></md-icon>
+                </md-button>
+                {{teacher.name}} {{teacher.surname}}
+              </ul>
+            </div>
+            <md-button class="md-raised md-primary" ng-click="$ctrl.newTeacher()">New Teacher</md-button>
+          </div>
+          <div layout="column" flex="50">
+            <div style="overflow: hidden;overflow-y: scroll;height: 340px;">
+              <ul ng-repeat="course in $ctrl.courses" style="font-size: 18px">
+                <md-button class="md-icon-button" aria-label="delete course" ng-click="$ctrl.deleteCourse(course)">
+                  <md-icon md-svg-icon="assets/img/round-delete-24px.svg"></md-icon>
+                </md-button>
+                {{course.courseTitle}}
+              </ul>
+            </div>
+            <md-button class="md-raised md-primary" ng-click="$ctrl.newCourse('Create a new course', 'choose a name')">New Course</md-button>
+          </div>
+        </div>
+        
+        <div layout="column" flex="50">
+          <div style="overflow: hidden;overflow-y: scroll;height: 340px;">
+            <ul ng-repeat="assoc in $ctrl.teachers" style="font-size: 18px">
+              <md-button class="md-icon-button" aria-label="delete association" ng-click="$ctrl.deleteAssoc(assoc)">
+                <md-icon md-svg-icon="assets/img/round-delete-24px.svg"></md-icon>
+              </md-button>
+              {{assoc.name}} {{assoc.surname}} - 
+              <md-input-container>
+                <label>Course</label>
+                <md-select ng-model="assoc.new_course">
+                  <md-option ng-if="!(assoc.course === undefined)" ng-value="undefined">{{assoc.course.courseTitle}}</md-option>
+                  <md-option ng-repeat="course in $ctrl.filterCourses(assoc.course)" ng-value="course">
+                    {{course.courseTitle}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+            </ul>
+          </div>
+            <md-button layout-padding class="md-raised md-primary" ng-click="$ctrl.updateAssoc()">Confirm</md-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

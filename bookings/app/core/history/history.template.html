@@ -1,0 +1,66 @@
+<div>
+  <md-toolbar class="md-hue-2">
+    <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" aria-label="Back" ng-click="$ctrl.backHome()">
+          <md-icon md-svg-icon="assets/img/round-arrow_back-24px.svg"></md-icon>
+        </md-button>
+      <h1 flex md-truncate>Bookings</h1>
+      
+      <h4 ng-show="$ctrl.user.isLogged()">Hi, {{$ctrl.user.username}}</h4>
+      <md-button ng-click="$ctrl.invalidateSession()" ng-show="$ctrl.user.isLogged()" class="md-icon-button" aria-label="Logout">
+        <md-icon md-svg-icon="assets/img/round-exit_to_app-24px.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  
+  <div style="margin: 16px" ng-show="$ctrl.incomingBookings.length > 0">
+    <h1>Incoming</h1>
+    <div class="md-padding" layout="row" flex layout-wrap>
+      <div layout="row" flex layout-wrap>
+        <div class="parent" layout="column" ng-repeat="booking in $ctrl.incomingBookings" flex="noshrink">
+          <md-card>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">{{booking.booking_from.course.courseTitle}}</span>
+                <span class="md-subhead">
+                 <strong><i>{{booking.booking_from.name}} {{booking.booking_from.surname}}</i></strong><br>
+                </span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              il {{booking.booking_date}}
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="start center">
+                <md-button md-no-ink class="md-primary" ng-click="$ctrl.unbook(booking.booking_id)">Cancel</md-button>
+            </md-card-actions>
+          </md-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 16px" ng-show="$ctrl.pastBookings.length > 0">
+    <h1>Past</h1>
+    <div class="md-padding" layout="row" flex layout-wrap>
+      <div layout="row" flex layout-wrap>
+        <div class="parent" layout="column" ng-repeat="history in $ctrl.pastBookings" flex="noshrink">
+          <md-card>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">{{history.booking_id.booking_from.course.courseTitle}}</span>
+                <span class="md-subhead">
+                  <strong><i>{{history.booking_id.booking_from.name}} {{history.booking_id.booking_from.surname}}</i></strong>
+                </span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              il {{history.booking_id.booking_date}}<br>
+              Status: <strong>{{history.booking_state.state_title}}</strong><br> 
+              on: {{history.action_date}}
+            </md-card-content>
+          </md-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

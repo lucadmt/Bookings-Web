@@ -1,0 +1,94 @@
+<div>
+  <md-toolbar class="md-hue-2">
+    <div class="md-toolbar-tools">
+      <h1 flex md-truncate>Bookings</h1>
+
+      <md-button ng-disabled="!($ctrl.getSelected().length > 0)" class="md-icon-button" aria-label="Book" ng-click="$ctrl.bookSelected()">
+        <md-icon md-svg-icon="assets/img/round-assignment_turned_in-24px.svg"></md-icon>
+      </md-button>
+  
+      <md-button ng-disabled="!($ctrl.user.isLogged())" class="md-icon-button" aria-label="History" ng-click="$ctrl.toHistory()">
+        <md-icon md-svg-icon="assets/img/round-history-24px.svg"></md-icon>
+      </md-button>
+
+      <md-button ng-show="$ctrl.user.isAdministrator()" class="md-icon-button" aria-label="Administration" ng-click="$ctrl.toAdministration()">
+          <md-icon md-svg-icon="assets/img/round-security-24px.svg"></md-icon>
+        </md-button>
+  
+      <h4 ng-show="$ctrl.user.isLogged()">{{$ctrl.user.username}}</h4>
+
+      <md-button ng-click="$ctrl.toLogin()" ng-show="!$ctrl.user.isLogged()" class="md-icon-button" aria-label="Login">
+        <md-icon md-svg-icon="assets/img/round-account_circle-24px.svg"></md-icon>
+      </md-button>
+
+      <md-button ng-click="$ctrl.invalidateSession()" ng-show="$ctrl.user.isLogged()" class="md-icon-button" aria-label="Logout">
+        <md-icon md-svg-icon="assets/img/round-exit_to_app-24px.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-whiteframe class="md-whiteframe-1dp" layout-wrap style="margin:16px" flex="auto" layout="row" layout-align="center center">
+
+    <!-- <div>
+        <md-icon md-svg-icon="assets/img/round-search-24px.svg" layout-align="start"></md-icon>
+    </div> -->
+
+    <md-datepicker style="margin:16px"
+                   ng-model="$ctrl.qd" 
+                   md-placeholder="Enter date" 
+                   ng-change="$ctrl.onDateChanged()"></md-datepicker>
+
+    <md-input-container style="margin:16px">
+      <label>Hour</label>
+      <md-select ng-model="$ctrl.qh">
+        <md-option ng-value=" ">None</md-option>
+        <md-option ng-repeat="h in ['3:00', '4:00', '5:00', '6:00', '7:00']" ng-value="h">
+          {{h}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container style="margin:16px">
+      <label>Course</label>
+      <md-select ng-model="$ctrl.qs">
+        <md-option ng-value=" ">None</md-option>
+        <md-option ng-repeat="course in $ctrl.courses" ng-value="course">
+          {{course}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container style="margin:16px">
+      <label>Teacher</label>
+      <md-select ng-model="$ctrl.qt">
+        <md-option ng-value=" ">None</md-option>
+        <md-option ng-repeat="teacher in $ctrl.teachersFor($ctrl.qs)" ng-value="teacher">
+          {{teacher}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </md-whiteframe>
+
+  <div class="md-padding" layout="row" flex layout-wrap>
+    <div layout="row" flex layout-wrap>
+      <div class="parent" layout="column" flex="noshrink" flex="nogrow" ng-repeat="booking in $ctrl.filterSameDate() | filter: $ctrl.qs | filter: $ctrl.qt | filter: $ctrl.qd | filter: $ctrl.qh">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">{{booking.booking_from.course.courseTitle}}</span>
+              <span class="md-subhead"><strong><i>{{booking.completeName}}</i></strong></span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            {{booking.booking_date}}
+          </md-card-content>
+          <md-card-actions>
+            <md-checkbox ng-show="$ctrl.user.isLogged()" ng-model="booking.selected" layout-align="start center" style="margin-left: 10px;">
+              Select
+            </md-checkbox>
+          </md-card-actions>
+        </md-card>
+      </div>
+    </div>
+  </div>
+</div>
